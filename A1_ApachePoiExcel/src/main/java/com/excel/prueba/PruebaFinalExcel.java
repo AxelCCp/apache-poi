@@ -8,7 +8,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.FontUnderline;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,6 +30,57 @@ public class PruebaFinalExcel {
 		XSSFWorkbook libro = new XSSFWorkbook();
 		XSSFSheet hoja = libro.createSheet("Clientes");
 		
+		
+		
+		
+		XSSFFont fuenteTitulo = new GeneradorFuentes.Builder().setNombreFuente("Berlin Sans FB")
+																.setTamanioFuente((short)18)
+																.setConNegrita(true)
+																.setTipoUnderline(FontUnderline.SINGLE)
+																.build(libro);
+		
+		/*XSSFCellStyle estiloTitulo = new GeneradorEstilos.Builder().setColorDefecto(IndexedColors.DARK_BLUE.getIndex())
+																	.setTipoPatron(FillPatternType.SOLID_FOREGROUND)
+																	.setAlineacionHorizontal(HorizontalAlignment.CENTER)
+																	.build(libro);*/
+		
+		XSSFCellStyle estiloTitulo = new GeneradorEstilos.Builder().setColorPersonalizado("C128CE")
+																	.setTipoPatron(FillPatternType.SOLID_FOREGROUND)
+																	.setAlineacionHorizontal(HorizontalAlignment.CENTER)
+																	.setBordeArriba(BorderStyle.THIN)
+																	.setBordeArriba(BorderStyle.THIN)
+																	.setBordeDerecho(BorderStyle.THIN)
+																	.setBordeIzquierdo(BorderStyle.THIN)
+																	.setFuente(fuenteTitulo)
+																	.build(libro);
+		
+		XSSFFont fuenteContenido = new GeneradorFuentes.Builder().setNombreFuente("Calibri")
+																	.setTamanioFuente((short)14)
+																	.setConItalica(true)
+																	.build(libro);
+		
+		XSSFCellStyle estilosContenido = new GeneradorEstilos.Builder().setColorPersonalizado("F6CCFA")
+																		.setTipoPatron(FillPatternType.SOLID_FOREGROUND)
+																		.setAlineacionHorizontal(HorizontalAlignment.CENTER)
+																		.setBordeArriba(BorderStyle.THIN)
+																		.setBordeArriba(BorderStyle.THIN)
+																		.setBordeDerecho(BorderStyle.THIN)
+																		.setBordeIzquierdo(BorderStyle.THIN)
+																		.setFuente(fuenteContenido)
+																		.build(libro);
+		
+		XSSFCellStyle estiloFecha = new GeneradorEstilos.Builder().setColorPersonalizado("F6CCFA")
+																		.setTipoPatron(FillPatternType.SOLID_FOREGROUND)
+																		.setAlineacionHorizontal(HorizontalAlignment.CENTER)
+																		.setBordeArriba(BorderStyle.THIN)
+																		.setBordeArriba(BorderStyle.THIN)
+																		.setBordeDerecho(BorderStyle.THIN)
+																		.setBordeIzquierdo(BorderStyle.THIN)
+																		.setFormato("dd/MM/yyyy")
+																		.setFuente(fuenteContenido)
+																		.build(libro);
+																		
+		
 		XSSFRow fila = null; 
 		XSSFCell celda = null;
 		
@@ -35,6 +93,7 @@ public class PruebaFinalExcel {
 				for(int j=0; j<campos.length; j++) {
 					celda = fila.createCell(j);
 					celda.setCellValue(campos[j].getName());
+					celda.setCellStyle(estiloTitulo);
 				}
 			}
 			
@@ -48,20 +107,24 @@ public class PruebaFinalExcel {
 				
 				if(atributos.get(a) instanceof Long) {
 					celda.setCellValue((Long) atributos.get(a));
+					celda.setCellStyle(estilosContenido);
 				}
 				if(atributos.get(a) instanceof String) {
 					celda.setCellValue((String) atributos.get(a));
+					celda.setCellStyle(estilosContenido);
 				}
 				if(atributos.get(a) instanceof LocalDate) {
 					celda.setCellValue((LocalDate) atributos.get(a));
+					celda.setCellStyle(estiloFecha);
 				}
+				
 				
 				hoja.autoSizeColumn(a);									//se adapta automaticamente el ancho de la columna. 
 			}
 		}
 		
 		try {
-			OutputStream output = new FileOutputStream("pruebaFinal.xlsx");
+			OutputStream output = new FileOutputStream("pruebaFinal_v4.xlsx");
 			libro.write(output);
 			libro.close();
 			output.close();

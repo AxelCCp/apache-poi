@@ -37,7 +37,7 @@ public class GeneradorEstilos {
 				this.colorPersonalizado = new XSSFColor(rgb);
 				return this;
 			} catch (Exception e) {
-				throw new RuntimeException("Error al codigicar el color.");
+				throw new RuntimeException("Error al codificar el color.");
 			}
 		}
 		
